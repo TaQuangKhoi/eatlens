@@ -1,8 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useLanguage } from '@/lib/LanguageContext';
+import LanguageSelector from '@/components/LanguageSelector';
 
 export default function Home() {
+  const { language, t } = useLanguage();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<string | null>(null);
@@ -38,6 +41,7 @@ export default function Home() {
       // Create form data
       const formData = new FormData();
       formData.append('image', blob, 'food.jpg');
+      formData.append('language', language);
 
       // Send to API
       const apiResponse = await fetch('/api/analyze', {
@@ -62,12 +66,15 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 dark:from-gray-900 dark:to-gray-800 p-8">
       <div className="max-w-4xl mx-auto">
+        <div className="flex justify-end mb-4">
+          <LanguageSelector />
+        </div>
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-green-600 text-transparent bg-clip-text">
-            🍽️ EatLens
+            {t('appTitle')}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300">
-            Upload a photo of your food and get AI-powered calorie estimates
+            {t('appDescription')}
           </p>
         </div>
 
@@ -102,10 +109,10 @@ export default function Home() {
                       />
                     </svg>
                     <p className="text-gray-600 dark:text-gray-300 mb-2">
-                      Click to upload or drag and drop
+                      {t('uploadPrompt')}
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      PNG, JPG, JPEG up to 10MB
+                      {t('uploadHint')}
                     </p>
                   </>
                 )}
@@ -149,10 +156,10 @@ export default function Home() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Analyzing...
+                  {t('analyzing')}
                 </span>
               ) : (
-                '🔍 Analyze Food & Calculate Calories'
+                t('analyzeButton')
               )}
             </button>
           )}
@@ -160,7 +167,7 @@ export default function Home() {
           {/* Error Message */}
           {error && (
             <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
-              <p className="text-red-800 dark:text-red-200">❌ {error}</p>
+              <p className="text-red-800 dark:text-red-200">{t('error')} {error}</p>
             </div>
           )}
 
@@ -168,7 +175,7 @@ export default function Home() {
           {analysis && (
             <div className="mt-6 p-6 bg-gradient-to-br from-green-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 rounded-xl border border-green-200 dark:border-gray-500">
               <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
-                📊 Analysis Results
+                {t('analysisResults')}
               </h2>
               <div className="prose dark:prose-invert max-w-none">
                 <pre className="whitespace-pre-wrap text-gray-700 dark:text-gray-200 font-sans">
@@ -181,9 +188,9 @@ export default function Home() {
 
         {/* Info Section */}
         <div className="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>Powered by Vercel AI SDK and OpenAI GPT-4 Vision</p>
+          <p>{t('poweredBy')}</p>
           <p className="mt-2">
-            Note: Calorie estimates are approximate and for informational purposes only.
+            {t('disclaimer')}
           </p>
         </div>
       </div>
