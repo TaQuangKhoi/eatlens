@@ -59,7 +59,7 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 15 with App Router
+- **Framework**: Next.js 16 with App Router
 - **AI**: Vercel AI SDK + OpenAI GPT-4 Vision
 - **Styling**: Tailwind CSS
 - **Language**: TypeScript
