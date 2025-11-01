@@ -2,7 +2,9 @@ import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 import { NextRequest, NextResponse } from 'next/server';
 
-const prompts = {
+type SupportedLanguage = 'vi' | 'en';
+
+const prompts: Record<SupportedLanguage, string> = {
   vi: `Phân tích hình ảnh món ăn này và cung cấp ước tính chi tiết về lượng calories. Vui lòng bao gồm:
 1. Danh sách các món ăn bạn có thể nhận diện
 2. Ước tính khẩu phần ăn
@@ -19,6 +21,10 @@ const prompts = {
 5. Brief nutritional notes (protein, carbs, fats if possible)
 
 Format your response in a clear, structured way.`,
+};
+
+const isValidLanguage = (lang: string): lang is SupportedLanguage => {
+  return Object.keys(prompts).includes(lang);
 };
 
 export async function POST(req: NextRequest) {
@@ -41,7 +47,7 @@ export async function POST(req: NextRequest) {
     const mimeType = image.type;
 
     // Use GPT-4 Vision to analyze the image
-    const language = (languageParam === 'vi' || languageParam === 'en') ? languageParam : 'vi';
+    const language: SupportedLanguage = isValidLanguage(languageParam) ? languageParam : 'vi';
     const prompt = prompts[language];
     const { text } = await generateText({
       model: openai('gpt-4o'),
