@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const image = formData.get('image') as File;
-    const language = (formData.get('language') as string) || 'vi';
+    const languageParam = formData.get('language') as string;
 
     if (!image) {
       return NextResponse.json(
@@ -41,7 +41,8 @@ export async function POST(req: NextRequest) {
     const mimeType = image.type;
 
     // Use GPT-4 Vision to analyze the image
-    const prompt = prompts[language as keyof typeof prompts] || prompts.vi;
+    const language = (languageParam === 'vi' || languageParam === 'en') ? languageParam : 'vi';
+    const prompt = prompts[language];
     const { text } = await generateText({
       model: openai('gpt-4o'),
       messages: [
