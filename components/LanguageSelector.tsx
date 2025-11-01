@@ -7,7 +7,10 @@ export default function LanguageSelector() {
   const { language, setLanguage, t } = useLanguage();
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLanguage(e.target.value as Language);
+    const value = e.target.value;
+    if (value === 'vi' || value === 'en') {
+      setLanguage(value);
+    }
   };
 
   return (

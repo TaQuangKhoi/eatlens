@@ -24,7 +24,7 @@ Format your response in a clear, structured way.`,
 };
 
 const isValidLanguage = (lang: string): lang is SupportedLanguage => {
-  return Object.keys(prompts).includes(lang);
+  return lang in prompts;
 };
 
 export async function POST(req: NextRequest) {
